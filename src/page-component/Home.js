@@ -82,7 +82,7 @@ const Home = () => {
       console.log("server res: ", res);
     } catch (err) {
       console.log("Eroor: ", err);
-      const error = new Error("Some error");
+      // const error = new Error("Some error");
       onError({ err });
     }
   };
