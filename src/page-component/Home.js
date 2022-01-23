@@ -10,7 +10,6 @@ import 'antd/dist/antd.css'
 import { Upload, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
-
 function getBase64(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
