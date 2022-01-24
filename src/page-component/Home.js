@@ -5,10 +5,13 @@ import axios from 'axios';
 // css
 import '../App.css';
 import 'antd/dist/antd.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 // component
 import { Upload, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
+import { Navbar, Container, Nav } from 'react-bootstrap';
+import { Typography } from 'antd';
 
 function getBase64(file) {
   return new Promise((resolve, reject) => {
@@ -25,6 +28,10 @@ const Home = () => {
   const [PreviewImage, setPreviewImage] = useState('')
   const [PreviewTitle, setPreviewTitle] = useState('')
   const [FileList, setFileList] = useState([])
+
+  const [resultImage, setResultImage] = useState('')
+
+  const { Title } = Typography;
 
   const handleCancel = () => {
     setPreviewVisible(false);
@@ -54,6 +61,9 @@ const Home = () => {
   const [progress, setProgress] = useState(0);
 
   const uploadImage = async options => {
+    
+    setResultImage('')
+
     const { onSuccess, onError, file, onProgress } = options;
 
     const fmData = new FormData();
@@ -77,6 +87,8 @@ const Home = () => {
         config
       );
 
+      setResultImage(res.data);
+
       onSuccess("Ok");
       console.log("server res: ", res);
     } catch (err) {
@@ -87,8 +99,23 @@ const Home = () => {
   };
 
   return (
-    <div>
-      <Upload
+    <div style={{ height:'900px'}}>
+
+      <Navbar bg="dark" variant="dark">
+        <Container>
+          <Navbar.Brand >PCa-Project</Navbar.Brand>
+          <Nav className="me-auto">
+            <Nav.Link >About</Nav.Link>
+            <Nav.Link >Dataset</Nav.Link>
+            <Nav.Link >Upload</Nav.Link>
+            <Nav.Link >Contact</Nav.Link>
+          </Nav>
+        </Container>
+      </Navbar>
+
+      <Container>
+        <br/>
+        <Upload
           // action="http://127.0.0.1:8000/api/uploadImage"
           customRequest={uploadImage}
           listType="picture-card"
@@ -100,6 +127,7 @@ const Home = () => {
         >
           {FileList.length >= 10 ? null : uploadButton}
         </Upload>
+        <Title level={5} style={{ color:'white' }}>{resultImage[0]}{resultImage[1]}</Title>
         <Modal
           visible={PreviewVisible}
           title={PreviewTitle}
@@ -108,6 +136,7 @@ const Home = () => {
         >
           <img alt="example" style={{ width: '100%' }} src={PreviewImage} />
         </Modal>
+      </Container>
     </div>
   );
 
