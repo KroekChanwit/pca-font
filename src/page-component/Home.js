@@ -1,5 +1,5 @@
 // main libary
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 // css
@@ -8,10 +8,12 @@ import 'antd/dist/antd.css'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 // component
-import { Upload, Modal } from 'antd';
+import { Upload, Modal, Divider } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { Navbar, Container, Nav } from 'react-bootstrap';
 import { Typography } from 'antd';
+import { Card } from 'antd';
+import { Table, Tag, Space } from 'antd';
 
 function getBase64(file) {
   return new Promise((resolve, reject) => {
@@ -29,7 +31,8 @@ const Home = () => {
   const [PreviewTitle, setPreviewTitle] = useState('')
   const [FileList, setFileList] = useState([])
 
-  const [resultImage, setResultImage] = useState('')
+  const [resultImage, setResultImage] = useState({name:null})
+  const [list,setList] = useState([])
 
   const { Title } = Typography;
 
@@ -62,7 +65,7 @@ const Home = () => {
 
   const uploadImage = async options => {
     
-    setResultImage('')
+    // setResultImage('')
 
     const { onSuccess, onError, file, onProgress } = options;
 
@@ -86,9 +89,11 @@ const Home = () => {
         fmData,
         config
       );
-
+      
+      console.log(res.data.props)
       setResultImage(res.data);
-
+      console.log(resultImage)
+      // setResultImage(prevState => [...prevState,res.data] );
       onSuccess("Ok");
       console.log("server res: ", res);
     } catch (err) {
@@ -96,10 +101,41 @@ const Home = () => {
       // const error = new Error("Some error");
       onError({ err });
     }
+
+    // setResultImage(prevState => [...prevState,{}] );
   };
 
+  useEffect(()=>{
+    setList(prevState => [...prevState,resultImage])
+    console.log(list.length)
+    console.log(list)
+  },[resultImage])
+
+  const columns = [
+    {
+      title: 'Image Name',
+      dataIndex: 'name',
+    },
+    {
+      title: 'Result',
+      dataIndex: 'result',
+    },
+    {
+      title: 'Probability (%)',
+      dataIndex: 'props',
+    },
+    {
+      title: 'Probability Average Ensemble (%)',
+      dataIndex: 'avg',
+    },
+    {
+      title: 'Probability Weighted Average Ensemble (%)',
+      dataIndex: 'wei',
+    },
+  ];
+
   return (
-    <div style={{ height:'900px'}}>
+    <div style={{ minHeight:'900px'}}>
 
       <Navbar bg="dark" variant="dark">
         <Container>
@@ -122,12 +158,15 @@ const Home = () => {
           fileList={FileList}
           onPreview={handlePreview}
           onChange={handleChange}
-          // multiple={true}
+          multiple={true}
           size
         >
-          {FileList.length >= 10 ? null : uploadButton}
+          {FileList.length >= 100 ? null : uploadButton}
         </Upload>
-        <Title level={5} style={{ color:'white' }}>{resultImage[0]}{resultImage[1]}</Title>
+
+        <br/><br/>
+        <Table columns={columns} dataSource={list.filter(item => item.name != null)} />
+
         <Modal
           visible={PreviewVisible}
           title={PreviewTitle}

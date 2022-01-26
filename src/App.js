@@ -28,7 +28,7 @@ const App = (props) => {
     backgroundPosition: 'center',
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
-    height: '100%'
+    height: '100%',
   }
 
   return (
