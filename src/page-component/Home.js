@@ -121,18 +121,27 @@ const Home = () => {
       dataIndex: 'result',
     },
     {
-      title: 'Probability (%)',
+      title: 'Probability',
       dataIndex: 'props',
     },
     {
-      title: 'Probability Average Ensemble (%)',
+      title: 'Probability Average Ensemble',
       dataIndex: 'avg',
     },
     {
-      title: 'Probability Weighted Average Ensemble (%)',
+      title: 'Probability Weighted Average Ensemble',
       dataIndex: 'wei',
     },
   ];
+
+  const divStyle = {
+    color: 'white',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    height:'40vh',
+    // textAlign: 'left',
+    paddingLeft:'10vh',
+    paddingTop:'10vh'
+  };
 
   return (
     <div style={{ minHeight:'900px'}}>
@@ -150,6 +159,17 @@ const Home = () => {
       </Navbar>
 
       <Container>
+        {/* <br/> */}
+        <div style={divStyle}>
+          <h3 style={{ color:'white' }}>There are 5 pretrained models that are used</h3><br/>
+          <h5 style={{ color:'white' }}>
+            InceptionResNetV2<br/>
+            InceptionV3 <br/>
+            ResNet50V2 <br/>
+            ResNet50 <br/>
+            Xception
+          </h5>
+        </div>
         <br/>
         <Upload
           // action="http://127.0.0.1:8000/api/uploadImage"
